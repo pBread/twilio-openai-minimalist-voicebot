@@ -1,6 +1,7 @@
 import dotenv from "dotenv-flow";
 import express from "express";
 import ExpressWs from "express-ws";
+import log from "./logger";
 import { startOpenAiWebsocket, stopOpenAiWebsocket } from "./openai";
 import type { TwilioStreamMessage } from "./types";
 
@@ -14,7 +15,7 @@ app.use(express.urlencoded({ extended: true })).use(express.json());
 ****************************************************/
 app.post("/incoming-call", async (req, res) => {
   const { CallSid, From, To } = req.body;
-  console.log(`incoming-call from ${From} to ${To}`);
+  log.twlo.info(`incoming-call from ${From} to ${To}`);
 
   await startOpenAiWebsocket();
 
@@ -37,7 +38,7 @@ app.post("/call-status-update", async (req, res) => {
     | "started"
     | "error";
 
-  console.log(`call-status-update ${CallStatus}`);
+  log.twlo.info(`call-status-update ${CallStatus}`);
 
   if (CallStatus === "completed" || CallStatus === "error")
     await stopOpenAiWebsocket();
@@ -50,7 +51,7 @@ app.post("/call-status-update", async (req, res) => {
 ****************************************************/
 app.ws("/media-stream/:callSid", (ws, req) => {
   const CallSid = req.params.callSid;
-  console.log(`establishing websocket ${CallSid}`);
+  log.twlo.info(`establishing websocket ${CallSid}`);
 
   ws.on("error", (err) => console.error(`websocket error`, err));
 
@@ -65,7 +66,7 @@ app.ws("/media-stream/:callSid", (ws, req) => {
 
     switch (msg.event) {
       case "connected":
-        console.log("media stream connected");
+        log.twlo.info("media stream connected");
         break;
 
       case "mark":
@@ -75,11 +76,11 @@ app.ws("/media-stream/:callSid", (ws, req) => {
         break;
 
       case "start":
-        console.log("media stream started");
+        log.twlo.info("media stream started");
         break;
 
       case "stop":
-        console.log("media stream stopped");
+        log.twlo.info("media stream stopped");
         break;
 
       default:
