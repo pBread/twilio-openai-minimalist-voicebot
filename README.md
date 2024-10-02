@@ -4,7 +4,7 @@ This is a simple example of a Node.js Express server written in TypeScript that 
 
 ## How it Works
 
-- The `/incoming-call` endpoint responds to Twilio's incoming call webhook with the TwiML noun `<Stream/>`
+- The `/incoming-call` endpoint responds to Twilio's incoming call webhook with the TwiML noun [`<Stream/>`](https://www.twilio.com/docs/voice/twiml/stream)
 - A [Media Stream](https://www.twilio.com/docs/voice/media-streams) is established with the app's websocket endpoint.
 - Audio packets from the voice call are forwarded to [OpenAI's Realtime API](https://platform.openai.com/docs/guides/realtime/overview).
 - OpenAI responds with audio packets, which are forwarded to Twilio.
