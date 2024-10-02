@@ -12,5 +12,5 @@
     "target": "es6"
   },
   "exclude": ["node_modules", "**/*.spec.ts", "scripts"],
-  "include": ["server/**/*.ts", "ui/**/*.ts", "global.d.ts"]
+  "include": ["server.ts", "global.d.ts", "openai/**/*.ts", "twilio/**/*.ts"]
 }
