@@ -12,6 +12,7 @@ app.use(express.urlencoded({ extended: true })).use(express.json());
  Webhook Endpoints
 ****************************************************/
 app.post("/incoming-call", async (req, res) => {
+  console.log("/incoming-call");
   const { CallSid, From, To } = req.body;
   console.log(`incoming-call from ${From} to ${To}`);
 
@@ -19,23 +20,22 @@ app.post("/incoming-call", async (req, res) => {
   res.type("text/xml");
 
   res.end(`
-      <Response>
-        <Connect>
-          <Stream url="wss://${process.env.HOSTNAME}/media-stream/${CallSid}"
-        </Connect>
-      </Response>
-      `);
+    <Response>
+      <Connect>
+        <Stream url="wss://${process.env.HOSTNAME}/media-stream/${CallSid}" />
+      </Connect>
+    </Response>
+    `);
 });
 
 app.post("/call-status-update", (req, res) => {
-  const { CallSid, CallStatus } = req.body;
-  console.log(`call-status-update ${CallSid} ${CallStatus}`);
+  console.log(`call-status-update ${req.body.CallStatus}`);
 
   res.status(200).send();
 });
 
 /****************************************************
- Media Stream
+ Twilio Media Stream
 ****************************************************/
 app.ws("/media-stream/:callSid", (ws, req) => {
   const CallSid = req.params.callSid;
