@@ -3,7 +3,7 @@ import log from "./logger";
 
 let oaiWs: WS | null;
 
-async function startOpenAiWebsocket(): Promise<void> {
+export async function startOpenAiWebsocket(): Promise<void> {
   return new Promise((resolve, reject) => {
     if (oaiWs)
       throw Error(
@@ -24,6 +24,7 @@ async function startOpenAiWebsocket(): Promise<void> {
 
     oaiWs.on("open", () => {
       log.opai.success("websocket opened");
+
       resolve();
     });
 
@@ -32,10 +33,17 @@ async function startOpenAiWebsocket(): Promise<void> {
 
       reject();
     });
+
+    oaiWs.on("message", (data: any) => {
+      const msg = JSON.parse(data.toString());
+
+      log.opai.info("message", msg.type as string, msg);
+      resolve();
+    });
   });
 }
 
-function stopOpenAiWebsocket(): Promise<void> {
+export function stopOpenAiWebsocket(): Promise<void> {
   return new Promise((resolve, reject) => {
     if (!oaiWs) {
       log.opai.warn("no WebSocket connection to disconnect");
@@ -58,4 +66,31 @@ function stopOpenAiWebsocket(): Promise<void> {
   });
 }
 
-export { startOpenAiWebsocket, stopOpenAiWebsocket };
+export function sendAudioToOpenAI(audio: string) {
+  const event = {
+    type: "input_audio_buffer.append",
+    audio,
+  };
+
+  dispatchToOpenAi(event);
+}
+
+export function updateSession() {
+  dispatchToOpenAi({
+    type: "session.update",
+    session: {
+      turn_detection: { type: "server_vad" },
+      input_audio_format: "g711_ulaw",
+      output_audio_format: "g711_ulaw",
+      voice: "alloy",
+      instructions:
+        "You are a helpful assistant answering questions about skit rentals",
+      modalities: ["text", "audio"],
+      temperature: 0.8,
+    },
+  });
+}
+
+export function dispatchToOpenAi(event: {}) {
+  oaiWs?.send(JSON.stringify(event));
+}
