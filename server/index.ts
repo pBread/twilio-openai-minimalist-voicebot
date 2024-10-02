@@ -51,12 +51,28 @@ app.ws("/media-stream/:callSid", (ws, req) => {
       return;
     }
 
-    if (msg.event === "connected") console.log("media stream connected");
-    else if (msg.event === "mark") {
-    } else if (msg.event === "start") console.log("media stream started");
-    else if (msg.event === "stop") console.log("media stream stopped");
-    else if (msg.event === "media") {
-    } else console.warn(`unhandled media stream message`, msg);
+    switch (msg.event) {
+      case "connected":
+        console.log("media stream connected");
+        break;
+
+      case "mark":
+        break;
+
+      case "media":
+        break;
+
+      case "start":
+        console.log("media stream started");
+        break;
+
+      case "stop":
+        console.log("media stream stopped");
+        break;
+
+      default:
+        console.warn(`unhandled media stream message`, msg);
+    }
   });
 });
 
