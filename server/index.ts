@@ -9,8 +9,8 @@ import {
   stopOpenAiWebsocket,
   updateSession,
 } from "./openai";
-import type { TwilioStreamMessage } from "./types";
 import { setTwilioStreamSid, setTwilioWs } from "./twilio";
+import type { TwilioStreamMessage } from "./types";
 
 dotenv.config();
 
