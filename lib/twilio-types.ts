@@ -1,3 +1,6 @@
+/****************************************************
+ Twilio Media Stream Messages
+****************************************************/
 export type TwilioStreamMessage =
   | ConnectedEvent
   | MarkEvent
@@ -45,3 +48,8 @@ type StopEvent = {
   streamSid: string;
   stop: { accountSid: string; callSid: string };
 };
+
+/****************************************************
+ Misc Twilio
+****************************************************/
+export type CallStatus = "completed" | "initializing" | "started" | "error";
