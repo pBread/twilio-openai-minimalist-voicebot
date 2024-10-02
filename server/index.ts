@@ -1,8 +1,8 @@
 import dotenv from "dotenv-flow";
 import express from "express";
 import ExpressWs from "express-ws";
-import type { TwilioStreamMessage } from "./types";
 import { startOpenAiWebsocket, stopOpenAiWebsocket } from "./openai";
+import type { TwilioStreamMessage } from "./types";
 
 dotenv.config();
 
