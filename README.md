@@ -1,4 +1,4 @@
-# Voice Agent with Twilio & OpenAI Realtime
+# Simple Voice Agent with Twilio & OpenAI Realtime
 
 This is a simple example of a Node.js Express server written in TypeScript that demonstrates how to use Twilio Voice to place voice calls to OpenAI's real-time streaming API.
 
@@ -20,8 +20,8 @@ This is a simple example of a Node.js Express server written in TypeScript that 
 ### 1. Clone Repo
 
 ```bash
-git clone https://github.com/pBread/voice-agent-with-twilio-openai-realtime
-cd voice-agent-with-twilio-openai-realtime
+git clone https://github.com/pBread/voice-calling-openai-realtime
+cd voice-calling-openai-realtime
 ```
 
 ### 2. Install Dependencies
