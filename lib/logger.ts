@@ -1,20 +1,20 @@
 import logger from "node-color-log";
 
 const app = logger.createNamedLogger("APP");
-const opai = logger.createNamedLogger("OAI");
-const twlo = logger.createNamedLogger("TWL");
+const oai = logger.createNamedLogger("OAI");
+const twl = logger.createNamedLogger("TWL");
 
 const log = {
   get app() {
     return app.color("white");
   },
 
-  get opai() {
-    return opai.color("cyan");
+  get oai() {
+    return oai.color("cyan");
   },
 
-  get twlo() {
-    return twlo.color("magenta");
+  get twl() {
+    return twl.color("magenta");
   },
 };
 
