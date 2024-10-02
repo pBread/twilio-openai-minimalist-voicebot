@@ -15,7 +15,7 @@ export type OpenAIActions =
 
 type ConversationItemCreate = {
   type: "conversation.item.create";
-  event_id: string;
+  event_id?: string;
   previous_item_id: string | null;
   item: {
     id: string;
@@ -28,13 +28,13 @@ type ConversationItemCreate = {
 
 type ConversationItemDelete = {
   type: "conversation.item.delete";
-  event_id: string;
+  event_id?: string;
   item_id: string;
 };
 
 type ConversationItemTruncate = {
   type: "conversation.item.truncate";
-  event_id: string;
+  event_id?: string;
   item_id: string;
   content_index: number;
   audio_end_ms: number;
@@ -42,28 +42,28 @@ type ConversationItemTruncate = {
 
 type InputAudioBufferAppend = {
   type: "input_audio_buffer.append";
-  event_id: string;
+  event_id?: string;
   audio: string;
 };
 
 type InputAudioBufferClear = {
   type: "input_audio_buffer.clear";
-  event_id: string;
+  event_id?: string;
 };
 
 type InputAudioBufferCommit = {
   type: "input_audio_buffer.commit";
-  event_id: string;
+  event_id?: string;
 };
 
 type ResponseCancel = {
   type: "response.cancel";
-  event_id: string;
+  event_id?: string;
 };
 
 type ResponseCreate = {
   type: "response.create";
-  event_id: string;
+  event_id?: string;
   response: {
     modalities: string[];
     instructions: string;
@@ -78,7 +78,7 @@ type ResponseCreate = {
 
 type SessionUpdate = {
   type: "session.update";
-  event_id: string;
+  event_id?: string;
   session: {
     modalities: string[];
     instructions: string;

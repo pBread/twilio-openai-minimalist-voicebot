@@ -75,3 +75,7 @@ export async function stopWs(): Promise<void> {
     });
   });
 }
+
+export function sendAudio(audio: string) {
+  dispatch({ type: "input_audio_buffer.append", audio });
+}

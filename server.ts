@@ -84,6 +84,7 @@ app.ws("/media-stream/:callSid", (ws, req) => {
         break;
 
       case "media":
+        oai.sendAudio(msg.media.payload);
         break;
 
       default:
