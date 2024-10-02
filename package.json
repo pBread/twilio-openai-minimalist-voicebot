@@ -2,7 +2,8 @@
   "author": "https://github.com/pBread",
   "name": "twilio-openai-voice-agent",
   "scripts": {
-    "dev": ""
+    "dev": "nodemon",
+    "grok": "node scripts/ngrok.js"
   },
   "version": "1.0.0",
   "dependencies": {
