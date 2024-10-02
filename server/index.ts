@@ -38,10 +38,10 @@ app.post("/call-status-update", async (req, res) => {
     | "started"
     | "error";
 
-  log.twlo.info(`call-status-update ${CallStatus}`);
-
-  if (CallStatus === "completed" || CallStatus === "error")
+  if (CallStatus === "completed" || CallStatus === "error") {
+    log.twlo.warn(`call-status-update ${CallStatus}`);
     await stopOpenAiWebsocket();
+  } else log.twlo.info(`call-status-update ${CallStatus}`);
 
   res.status(200).send();
 });
@@ -66,7 +66,7 @@ app.ws("/media-stream/:callSid", (ws, req) => {
 
     switch (msg.event) {
       case "connected":
-        log.twlo.info("media stream connected");
+        log.twlo.success("media stream connected");
         break;
 
       case "mark":
@@ -76,15 +76,15 @@ app.ws("/media-stream/:callSid", (ws, req) => {
         break;
 
       case "start":
-        log.twlo.info("media stream started");
+        log.twlo.success("media stream started");
         break;
 
       case "stop":
-        log.twlo.info("media stream stopped");
+        log.twlo.warn("media stream stopped");
         break;
 
       default:
-        console.warn(`unhandled media stream message`, msg);
+        log.twlo.warn(`unhandled media stream message`, msg);
     }
   });
 });
@@ -94,5 +94,5 @@ app.ws("/media-stream/:callSid", (ws, req) => {
 ****************************************************/
 const port = process.env.PORT || "3000";
 app.listen(port, () => {
-  console.log(`server running on http://localhost:${port}`);
+  log.app.info(`server running on http://localhost:${port}`);
 });

@@ -6,7 +6,7 @@ const twlo = logger.createNamedLogger("TWL");
 
 const log = {
   get app() {
-    return opai.color("white");
+    return app.color("white");
   },
 
   get opai() {

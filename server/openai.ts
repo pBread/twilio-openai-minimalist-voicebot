@@ -1,4 +1,5 @@
 import WS from "ws";
+import log from "./logger";
 
 let oaiWs: WS | null;
 
@@ -9,7 +10,7 @@ async function startOpenAiWebsocket(): Promise<void> {
         `There is already an active OpenAI websocket connection. This demo is limited to a single OpenAI connection at a time.`
       );
 
-    console.log("[OpenAI] connecting to websocket");
+    log.opai.info("connecting to websocket");
 
     oaiWs = new WS(
       "wss://api.openai.com/v1/realtime?model=gpt-4o-realtime-preview-2024-10-01",
@@ -22,12 +23,12 @@ async function startOpenAiWebsocket(): Promise<void> {
     );
 
     oaiWs.on("open", () => {
-      console.log("[OpenAI] websocket opened");
+      log.opai.success("websocket opened");
       resolve();
     });
 
     oaiWs.on("error", (error) => {
-      console.error("[OpenAI] websocket error", error);
+      log.opai.error("websocket error", error);
 
       reject();
     });
@@ -37,19 +38,19 @@ async function startOpenAiWebsocket(): Promise<void> {
 function stopOpenAiWebsocket(): Promise<void> {
   return new Promise((resolve, reject) => {
     if (!oaiWs) {
-      console.log("[OpenAI] no WebSocket connection to disconnect");
+      log.opai.warn("no WebSocket connection to disconnect");
       resolve();
       return;
     }
 
     oaiWs.on("close", () => {
-      console.log("[OpenAI] webSocket connection closed");
+      log.opai.warn("webSocket connection closed");
       oaiWs = null;
       resolve();
     });
 
     oaiWs.on("error", (error) => {
-      console.error("[OpenAI] error while closing WebSocket", error);
+      log.opai.error("error while closing WebSocket", error);
       reject(error);
     });
 
