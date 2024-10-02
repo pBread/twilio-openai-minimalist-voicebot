@@ -10,7 +10,7 @@ import {
   updateSession,
 } from "./openai";
 import { setTwilioStreamSid, setTwilioWs } from "./twilio";
-import type { TwilioStreamMessage } from "./types";
+import type { TwilioStreamMessage } from "./twilio-types";
 
 dotenv.config();
 
