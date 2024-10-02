@@ -84,7 +84,6 @@ app.ws("/media-stream/:callSid", (ws, req) => {
         break;
 
       case "media":
-        twlo.sendAudio(msg.media.payload);
         break;
 
       default:
