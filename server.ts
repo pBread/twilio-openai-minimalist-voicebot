@@ -2,7 +2,8 @@ import dotenv from "dotenv-flow";
 import express from "express";
 import ExpressWs from "express-ws";
 import log from "./lib/logger";
-import type { CallStatus } from "./lib/twilio-types";
+import type { CallStatus, TwilioStreamMessage } from "./lib/twilio-types";
+import * as twlo from "./lib/twilio";
 
 dotenv.config();
 
@@ -52,7 +53,44 @@ app.post("/call-status-update", async (req, res) => {
 /****************************************************
  Twilio Media Stream Websocket Endpoint 
 ****************************************************/
-app.ws("/media-stream/:callSid", (ws, req) => {});
+app.ws("/media-stream/:callSid", (ws, req) => {
+  log.twl.info("incoming websocket");
+
+  twlo.setWs(ws);
+
+  ws.on("error", (err) => log.twl.error(`websocket error`, err));
+
+  ws.on("message", (data) => {
+    let msg: TwilioStreamMessage;
+    try {
+      msg = JSON.parse(data.toString());
+    } catch (error) {
+      console.error("unexpected websocket message datatype");
+      return;
+    }
+
+    switch (msg.event) {
+      case "start":
+        log.twl.success("media stream started");
+        twlo.setStreamSid(msg.streamSid);
+
+        break;
+
+      case "stop":
+        break;
+
+      case "mark":
+        log.twl.info(`mark: ${msg.mark}`);
+        break;
+
+      case "media":
+        twlo.sendAudio(msg.media.payload);
+        break;
+
+      default:
+    }
+  });
+});
 
 /****************************************************
  Start Server
