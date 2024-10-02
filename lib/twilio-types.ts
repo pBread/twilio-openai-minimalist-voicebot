@@ -1,7 +1,13 @@
 /****************************************************
  Twilio Media Stream Actions
+ https://www.twilio.com/docs/voice/media-streams/websocket-messages#send-websocket-messages-to-twilio
 ****************************************************/
-export type TwilioStreamAction = SendAudio;
+export type TwilioStreamAction = Clear | SendAudio | SendMark;
+
+type Clear = {
+  event: "clear";
+  streamSid: string;
+};
 
 type SendAudio = {
   event: "media";
@@ -9,11 +15,19 @@ type SendAudio = {
   media: { payload: string };
 };
 
+type SendMark = {
+  event: "mark";
+  streamSid: string;
+  mark: { name: string };
+};
+
 /****************************************************
  Twilio Media Stream Messages
+ https://www.twilio.com/docs/voice/media-streams/websocket-messages
 ****************************************************/
 export type TwilioStreamMessage =
   | ConnectedEvent
+  | DTMFEvent
   | MarkEvent
   | MediaEvent
   | StartEvent
@@ -23,6 +37,13 @@ type ConnectedEvent = {
   event: "connected";
   protocol: string;
   version: string;
+};
+
+type DTMFEvent = {
+  event: "dtmf";
+  dtmf: { digit: string; track: string };
+  sequenceNumber: number;
+  streamSid: string;
 };
 
 export type MarkEvent = {
