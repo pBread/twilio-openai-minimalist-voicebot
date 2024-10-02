@@ -10,6 +10,7 @@ import {
   updateSession,
 } from "./openai";
 import type { TwilioStreamMessage } from "./types";
+import { setTwilioStreamSid, setTwilioWs } from "./twilio";
 
 dotenv.config();
 
@@ -59,6 +60,8 @@ app.ws("/media-stream/:callSid", (ws, req) => {
   const CallSid = req.params.callSid;
   log.twlo.info(`establishing websocket ${CallSid}`);
 
+  setTwilioWs(ws);
+
   let streamId: string;
 
   ws.on("error", (err) => console.error(`websocket error`, err));
@@ -92,7 +95,7 @@ app.ws("/media-stream/:callSid", (ws, req) => {
 
       case "start":
         log.twlo.success("media stream started");
-        streamId = msg.streamSid;
+        setTwilioStreamSid(msg.streamSid);
 
         updateSession();
         break;
