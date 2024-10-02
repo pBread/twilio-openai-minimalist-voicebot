@@ -1,15 +1,20 @@
+/****************************************************
+ Open AI Real Stime Websocket Events
+ https://platform.openai.com/docs/api-reference/realtime-server-events
+****************************************************/
 export type OpenAIStreamMessage =
-  | SessionCreatedEvent
-  | SessionUpdatedEvent
+  | ConversationItemCreatedEvent
+  | ErrorEvent
+  | InputAudioBufferCommittedEvent
   | InputAudioBufferSpeechStartedEvent
   | InputAudioBufferSpeechStoppedEvent
-  | InputAudioBufferCommittedEvent
-  | ConversationItemCreatedEvent
+  | ResponseAudioDeltaEvent
+  | ResponseAudioTranscriptDeltaEvent
+  | ResponseContentPartAddedEvent
   | ResponseCreatedEvent
   | ResponseOutputItemAddedEvent
-  | ResponseContentPartAddedEvent
-  | ResponseAudioTranscriptDeltaEvent
-  | ResponseAudioDeltaEvent;
+  | SessionCreatedEvent
+  | SessionUpdatedEvent;
 
 // Base types
 type RealtimeSession = {
@@ -54,16 +59,30 @@ type RealtimeResponse = {
 };
 
 // Event Types
-type SessionCreatedEvent = {
-  type: "session.created";
+type ConversationItemCreatedEvent = {
+  type: "conversation.item.created";
   event_id: string;
-  session: RealtimeSession;
+  previous_item_id: string;
+  item: RealtimeItem;
 };
 
-type SessionUpdatedEvent = {
-  type: "session.updated";
+type ErrorEvent = {
   event_id: string;
-  session: RealtimeSession;
+  type: string;
+  error: {
+    type: string;
+    code: string;
+    message: string;
+    param: any;
+    event_id: string;
+  };
+};
+
+type InputAudioBufferCommittedEvent = {
+  type: "input_audio_buffer.committed";
+  event_id: string;
+  previous_item_id: string | null;
+  item_id: string;
 };
 
 type InputAudioBufferSpeechStartedEvent = {
@@ -80,18 +99,37 @@ type InputAudioBufferSpeechStoppedEvent = {
   item_id: string;
 };
 
-type InputAudioBufferCommittedEvent = {
-  type: "input_audio_buffer.committed";
+type ResponseAudioDeltaEvent = {
+  type: "response.audio.delta";
   event_id: string;
-  previous_item_id: string | null;
+  response_id: string;
   item_id: string;
+  output_index: number;
+  content_index: number;
+  delta: string;
 };
 
-type ConversationItemCreatedEvent = {
-  type: "conversation.item.created";
+type ResponseAudioTranscriptDeltaEvent = {
+  type: "response.audio_transcript.delta";
   event_id: string;
-  previous_item_id: string;
-  item: RealtimeItem;
+  response_id: string;
+  item_id: string;
+  output_index: number;
+  content_index: number;
+  delta: string;
+};
+
+type ResponseContentPartAddedEvent = {
+  type: "response.content_part.added";
+  event_id: string;
+  response_id: string;
+  item_id: string;
+  output_index: number;
+  content_index: number;
+  part: {
+    type: string;
+    transcript: string;
+  };
 };
 
 type ResponseCreatedEvent = {
@@ -108,35 +146,14 @@ type ResponseOutputItemAddedEvent = {
   item: RealtimeItem;
 };
 
-type ResponseContentPartAddedEvent = {
-  type: "response.content_part.added";
+type SessionCreatedEvent = {
+  type: "session.created";
   event_id: string;
-  response_id: string;
-  item_id: string;
-  output_index: number;
-  content_index: number;
-  part: {
-    type: string;
-    transcript: string;
-  };
+  session: RealtimeSession;
 };
 
-type ResponseAudioTranscriptDeltaEvent = {
-  type: "response.audio_transcript.delta";
+type SessionUpdatedEvent = {
+  type: "session.updated";
   event_id: string;
-  response_id: string;
-  item_id: string;
-  output_index: number;
-  content_index: number;
-  delta: string;
-};
-
-type ResponseAudioDeltaEvent = {
-  type: "response.audio.delta";
-  event_id: string;
-  response_id: string;
-  item_id: string;
-  output_index: number;
-  content_index: number;
-  delta: string;
+  session: RealtimeSession;
 };
