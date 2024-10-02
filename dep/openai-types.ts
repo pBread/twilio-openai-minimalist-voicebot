@@ -1,4 +1,4 @@
-export type OpenAIEvent =
+export type OpenAIStreamMessage =
   | SessionCreatedEvent
   | SessionUpdatedEvent
   | InputAudioBufferSpeechStartedEvent
