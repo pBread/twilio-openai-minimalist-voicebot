@@ -1,4 +1,15 @@
 /****************************************************
+ Twilio Media Stream Actions
+****************************************************/
+export type TwilioStreamAction = SendAudio;
+
+type SendAudio = {
+  event: "media";
+  streamSid: string;
+  media: { payload: string };
+};
+
+/****************************************************
  Twilio Media Stream Messages
 ****************************************************/
 export type TwilioStreamMessage =
