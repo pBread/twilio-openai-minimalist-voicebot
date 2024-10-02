@@ -1,6 +1,6 @@
 {
-  "exec": "ts-node server/index.ts",
+  "exec": "ts-node server.ts",
   "ext": "ts,json",
   "ignore": ["node_modules", "**/*.spec.ts"],
-  "watch": ["server/**/*.ts"]
+  "watch": ["lib/**/*.ts", "server.ts"]
 }
