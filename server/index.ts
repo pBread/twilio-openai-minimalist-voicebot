@@ -12,7 +12,6 @@ app.use(express.urlencoded({ extended: true })).use(express.json());
  Webhook Endpoints
 ****************************************************/
 app.post("/incoming-call", async (req, res) => {
-  console.log("/incoming-call");
   const { CallSid, From, To } = req.body;
   console.log(`incoming-call from ${From} to ${To}`);
 
@@ -52,7 +51,7 @@ app.ws("/media-stream/:callSid", (ws, req) => {
       return;
     }
 
-    if (msg.event === "connected") console.log("websocket connected");
+    if (msg.event === "connected") console.log("media stream connected");
     else if (msg.event === "mark") {
     } else if (msg.event === "start") console.log("media stream started");
     else if (msg.event === "stop") console.log("media stream stopped");
