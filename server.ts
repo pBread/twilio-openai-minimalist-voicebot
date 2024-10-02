@@ -2,8 +2,9 @@ import dotenv from "dotenv-flow";
 import express from "express";
 import ExpressWs from "express-ws";
 import log from "./lib/logger";
-import type { CallStatus, TwilioStreamMessage } from "./lib/twilio-types";
+import * as oai from "./lib/openai";
 import * as twlo from "./lib/twilio";
+import type { CallStatus, TwilioStreamMessage } from "./lib/twilio-types";
 
 dotenv.config();
 
@@ -17,35 +18,34 @@ app.post("/incoming-call", async (req, res) => {
   const { CallSid, From, To } = req.body;
   log.twl.info(`incoming-call from ${From} to ${To}`);
 
-  res.status(200);
-  res.type("text/xml");
+  try {
+    await oai.startWs();
 
-  res.end(`
-      <Response>
-        <Connect>
-          <Stream url="wss://${process.env.HOSTNAME}/media-stream/${CallSid}" />
-        </Connect>
-      </Response>
-      `);
+    res.status(200);
+    res.type("text/xml");
+
+    res.end(`
+        <Response>
+          <Connect>
+            <Stream url="wss://${process.env.HOSTNAME}/media-stream/${CallSid}" />
+          </Connect>
+        </Response>
+        `);
+  } catch (error) {
+    log.oai.error(
+      "incoming call webhook failed because OpenAI websocket could not be connected."
+    );
+    res.status(500).send();
+  }
 });
 
 app.post("/call-status-update", async (req, res) => {
   const status = req.body.CallStatus as CallStatus;
 
-  switch (status) {
-    case "completed":
-      log.twl.info(`call-status-update ${status}`);
-      break;
+  if (status === "error") log.twl.error(`call-status-update ${status}`);
+  else log.twl.info(`call-status-update ${status}`);
 
-    case "error":
-      log.twl.error(`call-status-update ${status}`);
-      break;
-
-    case "initializing":
-    case "started":
-    default:
-      log.twl.info(`call-status-update ${status}`);
-  }
+  if (status === "error" || status === "completed") oai.stopWs();
 
   res.status(200).send();
 });

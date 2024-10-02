@@ -1,9 +1,13 @@
 import WS from "ws";
 import log from "./logger";
+import type { OpenAIActions, OpenAIStreamMessage } from "./openai-types";
 import * as twlo from "./twilio";
-import { OpenAIStreamMessage } from "./openai-types";
 
 let ws: WS | null = null;
+
+function dispatch(event: OpenAIActions) {
+  ws?.send(JSON.stringify(event));
+}
 
 export async function startWs(): Promise<void> {
   return new Promise((resolve, reject) => {
@@ -34,12 +38,40 @@ export async function startWs(): Promise<void> {
       reject();
     });
 
+    ws.on("close", () => {
+      log.oai.warn("webSocket connection closed");
+      ws = null;
+    });
+
     ws.on("error", (err) => {
       log.oai.error("websocket error", err);
     });
 
     ws.on("message", (data: any) => {
       const msg = JSON.parse(data.toString()) as OpenAIStreamMessage;
+
+      switch (msg.type) {
+        case "response.audio.delta":
+          twlo.sendAudio(msg.delta);
+          break;
+      }
+    });
+  });
+}
+
+export async function stopWs(): Promise<void> {
+  return new Promise((resolve, reject) => {
+    if (!ws) {
+      log.oai.warn("no WebSocket connection to disconnect");
+      resolve();
+      return;
+    }
+
+    ws.close();
+
+    ws.on("close", () => {
+      ws = null;
+      resolve();
     });
   });
 }
