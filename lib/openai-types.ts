@@ -65,14 +65,14 @@ type ResponseCreate = {
   type: "response.create";
   event_id?: string;
   response: {
-    modalities: string[];
-    instructions: string;
-    voice: string;
-    output_audio_format: string;
-    tools: Tool[];
-    tool_choice: string;
-    temperature: number;
-    max_output_tokens: number;
+    modalities?: string[];
+    instructions?: string;
+    voice?: string;
+    output_audio_format?: string;
+    tools?: Tool[];
+    tool_choice?: string;
+    temperature?: number;
+    max_output_tokens?: number;
   };
 };
 
@@ -80,22 +80,22 @@ type SessionUpdate = {
   type: "session.update";
   event_id?: string;
   session: {
-    modalities: string[];
-    instructions: string;
-    voice: string;
-    input_audio_format: string;
-    output_audio_format: string;
-    input_audio_transcription: { enabled: boolean; model: string };
-    turn_detection: {
-      type: string;
-      threshold: number;
-      prefix_padding_ms: number;
-      silence_duration_ms: number;
+    modalities?: string[];
+    instructions?: string;
+    voice?: string;
+    input_audio_format?: string;
+    output_audio_format?: string;
+    input_audio_transcription?: { enabled: boolean; model: string };
+    turn_detection?: {
+      type?: string;
+      threshold?: number;
+      prefix_padding_ms?: number;
+      silence_duration_ms?: number;
     };
-    tools: Tool[];
-    tool_choice: string;
-    temperature: number;
-    max_output_tokens: any;
+    tools?: Tool[];
+    tool_choice?: string;
+    temperature?: number;
+    max_output_tokens?: any;
   };
 };
 
@@ -103,11 +103,11 @@ type SessionUpdate = {
 type Tool = {
   type: string;
   name: string;
-  description: string;
+  description?: string;
   parameters: {
     type: string;
-    properties: { [key: string]: { type: string } };
-    required: string[];
+    properties?: { [key: string]: { type: string } };
+    required?: string[];
   };
 };
 

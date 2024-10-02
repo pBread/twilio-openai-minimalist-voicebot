@@ -79,3 +79,20 @@ export async function stopWs(): Promise<void> {
 export function sendAudio(audio: string) {
   dispatch({ type: "input_audio_buffer.append", audio });
 }
+
+export function setSession() {
+  dispatch({
+    type: "session.update",
+    session: {
+      input_audio_format: "g711_ulaw",
+      output_audio_format: "g711_ulaw",
+      modalities: ["text", "audio"],
+      voice: "alloy",
+
+      temperature: 0.8,
+      turn_detection: { type: "server_vad" },
+      instructions: `\
+      You are a helpful assistant answering questions about ski rentals`,
+    },
+  });
+}

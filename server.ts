@@ -74,6 +74,8 @@ app.ws("/media-stream/:callSid", (ws, req) => {
         log.twl.success("media stream started");
         twlo.setStreamSid(msg.streamSid);
 
+        oai.setSession();
+
         break;
 
       case "stop":
