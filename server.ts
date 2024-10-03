@@ -19,11 +19,12 @@ app.post("/incoming-call", async (req, res) => {
   log.twl.info(`incoming-call from ${From} to ${To}`);
 
   try {
-    await oai.startWs();
+    await oai.startWs(); // this demo only supports one call at a time
 
     res.status(200);
     res.type("text/xml");
 
+    // incoming calls are instructed to send media to the websocket below
     res.end(`
         <Response>
           <Connect>
@@ -64,8 +65,8 @@ app.ws("/media-stream/:callSid", (ws, req) => {
     let msg: TwilioStreamMessage;
     try {
       msg = JSON.parse(data.toString());
-    } catch (error) {
-      console.error("unexpected websocket message datatype");
+    } catch (err) {
+      log.app.error("unexpected websocket message datatype", err);
       return;
     }
 
