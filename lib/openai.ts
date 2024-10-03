@@ -91,7 +91,7 @@ export function onMessage<T extends OpenAIStreamMessageTypes>(
   type: T,
   callback: (message: OpenAIStreamMessage & { type: T }) => void
 ) {
-  ws?.on("message", (data) => {
+  ws.on("message", (data) => {
     const msg = JSON.parse(data.toString()) as OpenAIStreamMessage;
     if (msg.type === type) callback(msg as OpenAIStreamMessage & { type: T });
   });

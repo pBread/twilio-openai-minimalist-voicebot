@@ -38,7 +38,7 @@ export function onMessage<T extends TwilioStreamMessageTypes>(
   type: T,
   callback: (message: TwilioStreamMessage & { event: T }) => void
 ) {
-  ws?.on("message", (data) => {
+  ws.on("message", (data) => {
     const msg = JSON.parse(data.toString()) as TwilioStreamMessage;
     if (msg.event === type) callback(msg as TwilioStreamMessage & { event: T });
   });
