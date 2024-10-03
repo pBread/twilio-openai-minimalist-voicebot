@@ -1,8 +1,8 @@
 import WS from "ws";
+import conf from "../config.json";
 import log from "./logger";
 import type { OpenAIActions, OpenAIStreamMessage } from "./openai-types";
 import * as twlo from "./twilio";
-import conf from "../config.json";
 
 let ws: WS | null = null;
 
