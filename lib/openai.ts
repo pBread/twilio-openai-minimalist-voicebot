@@ -49,7 +49,8 @@ export async function startWs(): Promise<void> {
 
     ws.on("message", (data: any) => {
       const msg = JSON.parse(data.toString()) as OpenAIStreamMessage;
-      log.oai.debug(msg);
+
+      if (!["response.audio.delta"].includes(msg.type)) log.oai.debug(msg);
 
       switch (msg.type) {
         // bot starts speaking
@@ -71,12 +72,12 @@ export async function startWs(): Promise<void> {
 
         // bot partial transcript
         case "response.audio_transcript.delta":
-          // log.oai.info("bot transcript (delta): ", msg.delta);
+          log.oai.info("bot transcript (delta): ", msg.delta);
           break;
 
         // bot transcript complete
         case "response.audio_transcript.done":
-          // log.oai.info("bot transcript (final): ", msg.transcript);
+          log.oai.info("bot transcript (final): ", msg.transcript);
           break;
 
         case "error":
