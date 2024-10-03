@@ -123,6 +123,7 @@ export type OpenAIStreamMessage =
   | InputAudioBufferSpeechStoppedEvent
   | ResponseAudioDeltaEvent
   | ResponseAudioTranscriptDeltaEvent
+  | ResponseAudioTranscriptDoneEvent
   | ResponseContentPartAddedEvent
   | ResponseCreatedEvent
   | ResponseOutputItemAddedEvent
@@ -188,6 +189,16 @@ type ResponseAudioTranscriptDeltaEvent = {
   output_index: number;
   content_index: number;
   delta: string;
+};
+
+type ResponseAudioTranscriptDoneEvent = {
+  type: "response.audio_transcript.done";
+  event_id: string;
+  response_id: string;
+  item_id: string;
+  output_index: number;
+  content_index: number;
+  transcript: string;
 };
 
 type ResponseContentPartAddedEvent = {

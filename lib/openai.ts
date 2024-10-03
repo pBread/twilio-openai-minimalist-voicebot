@@ -51,14 +51,39 @@ export async function startWs(): Promise<void> {
       const msg = JSON.parse(data.toString()) as OpenAIStreamMessage;
 
       switch (msg.type) {
+        // bot starts speaking
+        case "conversation.item.created":
+          break;
+
+        // user starts speaking
+        case "input_audio_buffer.speech_started":
+          break;
+
+        // user stops speaking
+        case "input_audio_buffer.speech_stopped":
+          break;
+
+        // bot audio packets are forwarded to the Twilio call
         case "response.audio.delta":
           twlo.sendAudio(msg.delta);
           break;
 
+        // bot partial transcript
+        case "response.audio_transcript.delta":
+          log.oai.info("bot transcript (delta): ", msg.delta);
+          break;
+
+        // bot transcript complete
+        case "response.audio_transcript.done":
+          log.oai.info("bot transcript (final): ", msg.transcript);
+          break;
+
         case "error":
           log.oai.error(msg);
+          break;
 
         default:
+        // log.oai.info(msg);
       }
     });
   });
