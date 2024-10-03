@@ -1,6 +1,5 @@
 import { WebSocket } from "ws";
 import { TwilioStreamAction } from "./twilio-types";
-import { OpenAIStreamMessageTypes } from "./openai-types";
 
 let streamSid: string;
 export function setStreamSid(sid: string) {

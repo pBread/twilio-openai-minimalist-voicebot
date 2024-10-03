@@ -6,9 +6,8 @@ import type {
   OpenAIStreamMessage,
   OpenAIStreamMessageTypes,
 } from "./openai-types";
-import * as twlo from "./twilio";
 
-let ws: WS | null = null;
+export let ws: WS | null = null;
 
 function dispatch(event: OpenAIActions) {
   ws?.send(JSON.stringify(event));
@@ -60,31 +59,31 @@ export async function startWs(): Promise<void> {
         case "conversation.item.created":
           break;
 
-        // user starts speaking
-        case "input_audio_buffer.speech_started":
-          twlo.clearAudio();
-          clearAudio();
-          break;
+        // // user starts speaking
+        // case "input_audio_buffer.speech_started":
+        //   twlo.clearAudio();
+        //   clearAudio();
+        //   break;
 
         // user stops speaking
         case "input_audio_buffer.speech_stopped":
           break;
 
-        // bot audio packets are forwarded to the Twilio call
-        case "response.audio.delta":
-          twlo.sendAudio(msg.delta);
-          break;
+        // // bot audio packets are forwarded to the Twilio call
+        // case "response.audio.delta":
+        //   twlo.sendAudio(msg.delta);
+        //   break;
 
-        // bot partial transcript
-        case "response.audio_transcript.delta":
-          log.oai.info("bot transcript (delta): ", msg.delta);
-          break;
+        // // bot partial transcript
+        // case "response.audio_transcript.delta":
+        //   log.oai.info("bot transcript (delta): ", msg.delta);
+        //   break;
 
-        // bot transcript complete
-        case "response.audio_transcript.done":
-          log.oai.info("bot transcript (final): ", msg.transcript);
+        // // bot transcript complete
+        // case "response.audio_transcript.done":
+        //   log.oai.info("bot transcript (final): ", msg.transcript);
 
-          break;
+        //   break;
 
         case "error":
           log.oai.error(msg);

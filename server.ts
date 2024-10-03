@@ -61,6 +61,27 @@ app.ws("/media-stream/:callSid", (ws, req) => {
 
   ws.on("error", (err) => log.twl.error(`websocket error`, err));
 
+  // user starts speaking
+  oai.on("input_audio_buffer.speech_started", (msg) => {
+    oai.clearAudio();
+    twlo.clearAudio();
+  });
+
+  // bot audio packets are forwarded to the Twilio call
+  oai.on("response.audio.delta", (msg) => {
+    twlo.sendAudio(msg.delta);
+  });
+
+  // bot partial transcript
+  oai.on("response.audio_transcript.delta", (msg) => {
+    log.oai.info("bot transcript (delta): ", msg.delta);
+  });
+
+  // bot transcript complete
+  oai.on("response.audio_transcript.done", (msg) => {
+    log.oai.info("bot transcript (final): ", msg.transcript);
+  });
+
   ws.on("message", (data) => {
     let msg: TwilioStreamMessage;
     try {
