@@ -90,11 +90,6 @@ app.ws("/media-stream/:callSid", (ws, req) => {
     log.app.info("user started speaking");
   });
 
-  // bot partial transcript
-  oai.onMessage("response.audio_transcript.delta", (msg) =>
-    log.oai.info("bot transcript (delta): ", msg.delta)
-  );
-
   // bot final transcript
   oai.onMessage("response.audio_transcript.done", (msg) => {
     log.oai.info("bot transcript (final): ", msg.transcript);
