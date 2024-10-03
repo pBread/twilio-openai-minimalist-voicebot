@@ -6,7 +6,7 @@ export function setStreamSid(sid: string) {
   streamSid = sid;
 }
 
-let ws: WebSocket | null = null;
+export let ws: WebSocket;
 export function setWs(wss: WebSocket) {
   ws = wss;
 }

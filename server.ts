@@ -58,8 +58,7 @@ app.ws("/media-stream/:callSid", (ws, req) => {
   log.twl.info("incoming websocket");
 
   twlo.setWs(ws);
-
-  ws.on("error", (err) => log.twl.error(`websocket error`, err));
+  twlo.ws.on("error", (err) => log.twl.error(`websocket error`, err));
 
   // user starts speaking
   oai.on("input_audio_buffer.speech_started", (msg) => {
