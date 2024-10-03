@@ -4,7 +4,7 @@ import ExpressWs from "express-ws";
 import log from "./lib/logger";
 import * as oai from "./lib/openai";
 import * as twlo from "./lib/twilio";
-import type { CallStatus, TwilioStreamMessage } from "./lib/twilio-types";
+import type { CallStatus } from "./lib/twilio-types";
 
 dotenv.config();
 
