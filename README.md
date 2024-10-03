@@ -20,8 +20,8 @@ This is a simple example of a Node.js Express server written in TypeScript that 
 ### 1. Clone Repo
 
 ```bash
-git clone https://github.com/pBread/voice-calling-openai-realtime
-cd voice-calling-openai-realtime
+git clone https://github.com/pBread/twilio-openai-voicebot
+cd twilio-openai-voicebot
 ```
 
 ### 2. Install Dependencies
