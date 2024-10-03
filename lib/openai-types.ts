@@ -41,8 +41,8 @@ type ConversationItemTruncate = {
   type: "conversation.item.truncate";
   event_id?: string;
   item_id: string;
-  content_index: number;
-  audio_end_ms: number;
+  content_index?: number;
+  audio_end_ms?: number;
 };
 
 type InputAudioBufferAppend = {
