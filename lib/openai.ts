@@ -68,7 +68,7 @@ export function sendAudio(audio: string) {
 // these config params should probably be set when the OpenAI websocket is initialized
 // but, setting them slightly later (i.e. when the Twilio Media starts) seems to make
 // OpenAI's bot more responsive.
-export function setSession() {
+export function setSessionParams() {
   dispatch({
     type: "session.update",
     session: {
@@ -87,7 +87,7 @@ export function setSession() {
 /****************************************************
  Event Subscribers
 ****************************************************/
-export function on<T extends OpenAIStreamMessageTypes>(
+export function onMessage<T extends OpenAIStreamMessageTypes>(
   type: T,
   callback: (message: OpenAIStreamMessage & { type: T }) => void
 ) {

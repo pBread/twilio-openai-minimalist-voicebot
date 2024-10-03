@@ -4,13 +4,7 @@ import ExpressWs from "express-ws";
 import log from "./lib/logger";
 import * as oai from "./lib/openai";
 import * as twlo from "./lib/twilio";
-import type {
-  CallStatus,
-  TwilioStreamMessage,
-  TwilioStreamMessageTypes,
-} from "./lib/twilio-types";
-import { onMatch } from "./lib/util";
-import { OpenAIStreamMessage } from "./lib/openai-types";
+import type { CallStatus, TwilioStreamMessage } from "./lib/twilio-types";
 
 dotenv.config();
 
@@ -71,63 +65,35 @@ app.ws("/media-stream/:callSid", (ws, req) => {
   twlo.setWs(ws);
   twlo.ws.on("error", (err) => log.twl.error(`websocket error`, err));
 
-  ws.on("message", (data) => {
-    const msg: TwilioStreamMessage = JSON.parse(data.toString());
-    if (msg.event !== "start") return;
+  // twilio media stream starts
+  twlo.onMessage("start", (msg) => {
+    log.twl.success("media stream started");
+    twlo.setStreamSid(msg.streamSid);
+
+    // The session params should probably be set when the OpenAI websocket is initialized
+    // but, setting them slightly later (i.e. when the Twilio Media starts) seems to make
+    // OpenAI's bot more responsive. I don't know why.
+    oai.setSessionParams();
   });
 
-  // user starts speaking
-  oai.on("input_audio_buffer.speech_started", (msg) => {
-    oai.clearAudio();
-    twlo.clearAudio();
-  });
+  // relay audio packets between Twilio & OpenAI
+  oai.onMessage("response.audio.delta", (msg) => twlo.sendAudio(msg.delta));
+  twlo.onMessage("media", (msg) => oai.sendAudio(msg.media.payload));
 
-  // bot audio packets are forwarded to the Twilio call
-  oai.on("response.audio.delta", (msg) => {
-    twlo.sendAudio(msg.delta);
+  // user starts talking
+  oai.onMessage("input_audio_buffer.speech_started", (msg) => {
+    oai.clearAudio(); // tell OpenAI to stop sending audio
+    twlo.clearAudio(); // tell Twilio to stop playing any audio that it's buffered
   });
 
   // bot partial transcript
-  oai.on("response.audio_transcript.delta", (msg) => {
-    log.oai.info("bot transcript (delta): ", msg.delta);
-  });
+  oai.onMessage("response.audio_transcript.delta", (msg) =>
+    log.oai.info("bot transcript (delta): ", msg.delta)
+  );
 
-  // bot transcript complete
-  oai.on("response.audio_transcript.done", (msg) => {
+  // bot final transcript
+  oai.onMessage("response.audio_transcript.done", (msg) => {
     log.oai.info("bot transcript (final): ", msg.transcript);
-  });
-
-  ws.on("message", (data) => {
-    let msg: TwilioStreamMessage;
-    try {
-      msg = JSON.parse(data.toString());
-    } catch (err) {
-      log.app.error("unexpected websocket message datatype", err);
-      return;
-    }
-
-    switch (msg.event) {
-      case "start":
-        log.twl.success("media stream started");
-        twlo.setStreamSid(msg.streamSid);
-
-        oai.setSession();
-
-        break;
-
-      case "stop":
-        break;
-
-      case "mark":
-        log.twl.info(`mark: ${msg.mark}`);
-        break;
-
-      case "media":
-        oai.sendAudio(msg.media.payload);
-        break;
-
-      default:
-    }
   });
 });
 
