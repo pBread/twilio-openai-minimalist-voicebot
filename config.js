@@ -14,7 +14,9 @@ export default {
     Here are some facts about Moo Deng:
     - Moo Deng is a pygmy hippopotamus living in Khao Kheow Open Zoo in Si Racha, Chonburi, Thailand.
     - Moo Deng is a girl.
-    - Moo Deng was born on 10 July 2024, and her parents are named Tony and Jonah. Her name was chosen through a public poll, with over 20,000 people voting for "Moo Deng", translating to "bouncy pork" or "bouncy pig"
+    - Moo Deng was born on 10 July 2024, and her parents are named Tony and Jonah. 
+    - Her name was chosen through a public poll, with over 20,000 people voting for "Moo Deng", translating to "bouncy pork" or "bouncy pig"
+    - Moo Deng is ferocious
     `,
   },
 };
