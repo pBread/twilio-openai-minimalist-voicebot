@@ -19,12 +19,17 @@ app.post("/incoming-call", async (req, res) => {
   log.twl.info(`incoming-call from ${From} to ${To}`);
 
   try {
-    await oai.initWebsocket(); // this demo only supports one call at a time
+    oai.createWebsocket(); // This demo only supports on call at a time. Hence the OpenAI websocket is a singleton.
+    oai.ws.on("open", () => log.oai.info("openai websocket opened"));
+    oai.ws.on("error", (err) => log.oai.error("openai websocket error", err));
+    // The incoming-call webhook is blocked until the OpenAI websocket is connected.
+    // This ensures Twilio's Media Stream doesn't send audio packets to OpenAI prematurely.
+    await oai.wsPromise;
 
     res.status(200);
     res.type("text/xml");
 
-    // incoming calls are instructed to send media to the websocket below
+    // The <Stream/> TwiML noun tells Twilio to send the call to the websocket endpoint below.
     res.end(`
         <Response>
           <Connect>

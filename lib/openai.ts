@@ -7,20 +7,21 @@ import type {
   OpenAIStreamMessageTypes,
 } from "./openai-types";
 
-export let ws: WS | null = null;
+export let ws: WS;
+export let wsPromise: Promise<void>;
 
 /****************************************************
  Establish Websocket Connection to OpenAI
  https://platform.openai.com/docs/guides/realtime/overview
 ****************************************************/
-export async function initWebsocket() {
-  if (ws)
+export function createWebsocket() {
+  // websocket must be closed or uninitialized
+  if (ws && ws?.readyState !== ws.CLOSED)
     throw Error(
       `There is already an active OpenAI websocket connection. This demo is limited to a single OpenAI connection at a time.`
     );
 
-  log.oai.info("initializing websocket");
-  return new Promise((resolve, reject) => {
+  wsPromise = new Promise<void>((resolve, reject) => {
     ws = new WS(conf.openai.wsUrl, {
       headers: {
         Authorization: "Bearer " + process.env.OPENAI_API_KEY,
@@ -28,18 +29,11 @@ export async function initWebsocket() {
       },
     });
 
-    ws.on("open", () => {
-      log.oai.success("websocket opened");
-      resolve(null);
-    });
-    ws.on("unexpected-response", (req, msg) => {
-      log.oai.error("connection failure", msg);
-      reject();
-    });
-    ws.on("error", (err) => {
-      log.oai.error("websocket error", err);
-    });
+    ws.on("open", () => resolve());
+    ws.on("unexpected-response", (_, msg) => reject(msg));
   });
+
+  return wsPromise;
 }
 
 export async function closeWebsocket(): Promise<void> {
@@ -51,7 +45,6 @@ export async function closeWebsocket(): Promise<void> {
     }
 
     ws.on("close", () => {
-      ws = null;
       resolve();
     });
 
