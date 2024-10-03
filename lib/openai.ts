@@ -2,6 +2,7 @@ import WS from "ws";
 import log from "./logger";
 import type { OpenAIActions, OpenAIStreamMessage } from "./openai-types";
 import * as twlo from "./twilio";
+import conf from "../config.json";
 
 let ws: WS | null = null;
 
@@ -126,11 +127,11 @@ export function setSession() {
       input_audio_format: "g711_ulaw",
       output_audio_format: "g711_ulaw",
       modalities: ["text", "audio"],
-      voice: "alloy",
-      temperature: 0.8,
       turn_detection: { type: "server_vad" },
-      instructions: `\
-      You are a helpful assistant answering questions about ski rentals`,
+
+      instructions: conf.openai.instructions,
+      temperature: conf.openai.temperature,
+      voice: conf.openai.voice,
     },
   });
 }

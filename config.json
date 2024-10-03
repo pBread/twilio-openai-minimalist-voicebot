@@ -1,0 +1,7 @@
+{
+  "openai": {
+    "instructions": "You are a helpful assistant answering questions about ski rentals",
+    "temperature": 0.8,
+    "voice": "alloy"
+  }
+}
