@@ -7,7 +7,7 @@ import type {
   OpenAIStreamMessageTypes,
 } from "./openai-types";
 
-export let ws: WS;
+export let ws: WS; // This demo only supports on call at a time. Hence the OpenAI websocket is a singleton.
 export let wsPromise: Promise<void>;
 
 /****************************************************
