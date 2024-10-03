@@ -50,8 +50,6 @@ export async function startWs(): Promise<void> {
     ws.on("message", (data: any) => {
       const msg = JSON.parse(data.toString()) as OpenAIStreamMessage;
 
-      if (!["response.audio.delta"].includes(msg.type)) log.oai.debug(msg);
-
       switch (msg.type) {
         // bot starts speaking
         case "conversation.item.created":
@@ -59,6 +57,8 @@ export async function startWs(): Promise<void> {
 
         // user starts speaking
         case "input_audio_buffer.speech_started":
+          twlo.clearAudio();
+          clearAudio();
           break;
 
         // user stops speaking
@@ -78,6 +78,7 @@ export async function startWs(): Promise<void> {
         // bot transcript complete
         case "response.audio_transcript.done":
           log.oai.info("bot transcript (final): ", msg.transcript);
+
           break;
 
         case "error":
@@ -85,7 +86,6 @@ export async function startWs(): Promise<void> {
           break;
 
         default:
-        // log.oai.info(msg);
       }
     });
   });
@@ -106,6 +106,10 @@ export async function stopWs(): Promise<void> {
       resolve();
     });
   });
+}
+
+export function clearAudio() {
+  dispatch({ type: "input_audio_buffer.clear" });
 }
 
 export function sendAudio(audio: string) {
