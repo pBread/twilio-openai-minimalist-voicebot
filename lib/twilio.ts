@@ -26,7 +26,3 @@ export function sendAudio(audio: string) {
 export function sendMark(name: string) {
   dispatch({ event: "mark", streamSid, mark: { name } });
 }
-
-/****************************************************
- Event Subscribers
-****************************************************/
