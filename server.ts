@@ -19,7 +19,7 @@ app.post("/incoming-call", async (req, res) => {
   log.twl.info(`incoming-call from ${From} to ${To}`);
 
   try {
-    await oai.startWs(); // this demo only supports one call at a time
+    await oai.initWebsocket(); // this demo only supports one call at a time
 
     res.status(200);
     res.type("text/xml");
@@ -46,7 +46,7 @@ app.post("/call-status-update", async (req, res) => {
   if (status === "error") log.twl.error(`call-status-update ${status}`);
   else log.twl.info(`call-status-update ${status}`);
 
-  if (status === "error" || status === "completed") oai.stopWs();
+  if (status === "error" || status === "completed") oai.closeWebsocket();
 
   res.status(200).send();
 });
