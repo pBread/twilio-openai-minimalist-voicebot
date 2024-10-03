@@ -4,7 +4,13 @@ import ExpressWs from "express-ws";
 import log from "./lib/logger";
 import * as oai from "./lib/openai";
 import * as twlo from "./lib/twilio";
-import type { CallStatus, TwilioStreamMessage } from "./lib/twilio-types";
+import type {
+  CallStatus,
+  TwilioStreamMessage,
+  TwilioStreamMessageTypes,
+} from "./lib/twilio-types";
+import { onMatch } from "./lib/util";
+import { OpenAIStreamMessage } from "./lib/openai-types";
 
 dotenv.config();
 
@@ -64,6 +70,11 @@ app.ws("/media-stream/:callSid", (ws, req) => {
 
   twlo.setWs(ws);
   twlo.ws.on("error", (err) => log.twl.error(`websocket error`, err));
+
+  ws.on("message", (data) => {
+    const msg: TwilioStreamMessage = JSON.parse(data.toString());
+    if (msg.event !== "start") return;
+  });
 
   // user starts speaking
   oai.on("input_audio_buffer.speech_started", (msg) => {

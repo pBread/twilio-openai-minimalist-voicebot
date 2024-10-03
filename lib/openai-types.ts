@@ -142,8 +142,8 @@ type ConversationItemCreatedEvent = {
 };
 
 type ErrorEvent = {
-  event_id: string;
   type: "error";
+  event_id: string;
   error: {
     type: string;
     code: string;
