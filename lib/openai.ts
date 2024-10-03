@@ -54,6 +54,11 @@ export async function startWs(): Promise<void> {
         case "response.audio.delta":
           twlo.sendAudio(msg.delta);
           break;
+
+        case "error":
+          log.oai.error(msg);
+
+        default:
       }
     });
   });
@@ -80,6 +85,8 @@ export function sendAudio(audio: string) {
   dispatch({ type: "input_audio_buffer.append", audio });
 }
 
+// these config params should probably be set when the OpenAI websocket is initialized
+// but, setting them slightly later (i.e. when the Twilio Media starts) seems to work better
 export function setSession() {
   dispatch({
     type: "session.update",
