@@ -9,8 +9,15 @@
     "rootDir": ".",
     "skipLibCheck": true,
     "strict": true,
-    "target": "es6"
+    "target": "es6",
+    "allowJs": true
   },
   "exclude": ["node_modules", "**/*.spec.ts", "scripts"],
-  "include": ["server.ts", "global.d.ts", "openai/**/*.ts", "twilio/**/*.ts"]
+  "include": [
+    "global.d.ts",
+    "openai/**/*.ts",
+    "twilio/**/*.ts",
+    "config.js",
+    "server.ts"
+  ]
 }

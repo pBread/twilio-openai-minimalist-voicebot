@@ -16,13 +16,18 @@ export type OpenAIActions =
 type ConversationItemCreate = {
   type: "conversation.item.create";
   event_id?: string;
-  previous_item_id: string | null;
+  previous_item_id?: string | null;
   item: {
-    id: string;
-    type: string;
-    status: string;
-    role: string;
-    content: { type: string; text: string }[];
+    id?: string;
+    type: "message" | "function_call" | "function_call_output";
+    status?: "completed" | "in_progress" | "incomplete";
+    role: "user" | "assistant" | "system";
+    content: {
+      type: "input_text" | "input_audio" | "text" | "audio";
+      text?: string;
+      audio?: string;
+      transcript?: string;
+    }[];
   };
 };
 

@@ -1,6 +1,7 @@
 import dotenv from "dotenv-flow";
 import express from "express";
 import ExpressWs from "express-ws";
+import config from "./config";
 import log from "./lib/logger";
 import * as oai from "./lib/openai";
 import * as twlo from "./lib/twilio";
@@ -74,6 +75,8 @@ app.ws("/media-stream/:callSid", (ws, req) => {
     // but, setting them slightly later (i.e. when the Twilio Media starts) seems to make
     // OpenAI's bot more responsive. I don't know why.
     oai.setSessionParams();
+
+    oai.speak(config.openai.introduction); // tell OpenAI to speak the introduction
   });
 
   // relay audio packets between Twilio & OpenAI

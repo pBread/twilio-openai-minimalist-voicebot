@@ -1,5 +1,5 @@
 import WS from "ws";
-import conf from "../config.json";
+import config from "../config";
 import log from "./logger";
 import type {
   OpenAIActions,
@@ -22,7 +22,7 @@ export function createWebsocket() {
     );
 
   wsPromise = new Promise<void>((resolve, reject) => {
-    ws = new WS(conf.openai.wsUrl, {
+    ws = new WS(config.openai.wsUrl, {
       headers: {
         Authorization: "Bearer " + process.env.OPENAI_API_KEY,
         "OpenAI-Beta": "realtime=v1",
@@ -61,6 +61,16 @@ export function clearAudio() {
   dispatch({ type: "input_audio_buffer.clear" });
 }
 
+export function speak(text: string) {
+  dispatch({
+    type: "response.create",
+    response: {
+      modalities: ["text", "audio"],
+      instructions: `Say this verbatum: ${text}`,
+    },
+  });
+}
+
 export function sendAudio(audio: string) {
   dispatch({ type: "input_audio_buffer.append", audio });
 }
@@ -77,9 +87,9 @@ export function setSessionParams() {
       modalities: ["text", "audio"],
       turn_detection: { type: "server_vad" },
 
-      instructions: conf.openai.instructions,
-      temperature: conf.openai.temperature,
-      voice: conf.openai.voice,
+      instructions: config.openai.instructions,
+      temperature: config.openai.temperature,
+      voice: config.openai.voice,
     },
   });
 }
