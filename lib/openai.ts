@@ -37,16 +37,14 @@ export function createWebsocket() {
 }
 
 export async function closeWebsocket(): Promise<void> {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     if (!ws) {
       log.oai.warn("no WebSocket connection to disconnect");
       resolve();
       return;
     }
 
-    ws.on("close", () => {
-      resolve();
-    });
+    ws.on("close", () => resolve());
 
     ws.close();
   });
