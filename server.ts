@@ -33,7 +33,7 @@ app.post("/incoming-call", async (req, res) => {
         `);
   } catch (error) {
     log.oai.error(
-      "incoming call webhook failed because OpenAI websocket could not be connected."
+      "incoming call webhook failed because OpenAI websocket could not connect."
     );
     res.status(500).send();
   }
