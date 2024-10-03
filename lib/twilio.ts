@@ -1,5 +1,6 @@
 import { WebSocket } from "ws";
 import { TwilioStreamAction } from "./twilio-types";
+import { OpenAIStreamMessageTypes } from "./openai-types";
 
 let streamSid: string;
 export function setStreamSid(sid: string) {
@@ -26,3 +27,7 @@ export function sendAudio(audio: string) {
 export function sendMark(name: string) {
   dispatch({ event: "mark", streamSid, mark: { name } });
 }
+
+/****************************************************
+ Event Subscribers
+****************************************************/

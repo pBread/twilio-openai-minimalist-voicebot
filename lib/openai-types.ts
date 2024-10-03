@@ -130,6 +130,9 @@ export type OpenAIStreamMessage =
   | SessionCreatedEvent
   | SessionUpdatedEvent;
 
+type ExtractEventType<T> = T extends { type: infer U } ? U : never;
+export type OpenAIStreamMessageTypes = ExtractEventType<OpenAIStreamMessage>;
+
 // Event Types
 type ConversationItemCreatedEvent = {
   type: "conversation.item.created";

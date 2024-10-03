@@ -1,7 +1,11 @@
 import WS from "ws";
 import conf from "../config.json";
 import log from "./logger";
-import type { OpenAIActions, OpenAIStreamMessage } from "./openai-types";
+import type {
+  OpenAIActions,
+  OpenAIStreamMessage,
+  OpenAIStreamMessageTypes,
+} from "./openai-types";
 import * as twlo from "./twilio";
 
 let ws: WS | null = null;
@@ -133,5 +137,18 @@ export function setSession() {
       temperature: conf.openai.temperature,
       voice: conf.openai.voice,
     },
+  });
+}
+
+/****************************************************
+ Event Subscribers
+****************************************************/
+export function on<T extends OpenAIStreamMessageTypes>(
+  type: T,
+  callback: (message: OpenAIStreamMessage & { type: T }) => void
+) {
+  ws?.on("message", (data) => {
+    const msg = JSON.parse(data.toString()) as OpenAIStreamMessage;
+    if (msg.type === type) callback(msg as OpenAIStreamMessage & { type: T });
   });
 }
