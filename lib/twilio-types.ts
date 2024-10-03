@@ -33,7 +33,7 @@ export type TwilioStreamMessage =
   | StartEvent
   | StopEvent;
 
-type ExtractEventType<T> = T extends { type: infer U } ? U : never;
+type ExtractEventType<T> = T extends { event: infer U } ? U : never;
 export type TwilioStreamMessageTypes = ExtractEventType<TwilioStreamMessage>;
 
 type ConnectedEvent = {
