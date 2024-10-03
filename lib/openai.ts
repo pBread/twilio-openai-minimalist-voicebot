@@ -21,15 +21,12 @@ export async function initWebsocket() {
 
   log.oai.info("initializing websocket");
   return new Promise((resolve, reject) => {
-    ws = new WS(
-      "wss://api.openai.com/v1/realtime?model=gpt-4o-realtime-preview-2024-10-01",
-      {
-        headers: {
-          Authorization: "Bearer " + process.env.OPENAI_API_KEY,
-          "OpenAI-Beta": "realtime=v1",
-        },
-      }
-    );
+    ws = new WS(conf.openai.wsUrl, {
+      headers: {
+        Authorization: "Bearer " + process.env.OPENAI_API_KEY,
+        "OpenAI-Beta": "realtime=v1",
+      },
+    });
 
     ws.on("open", () => {
       log.oai.success("websocket opened");
@@ -62,6 +59,9 @@ export async function closeWebsocket(): Promise<void> {
   });
 }
 
+/****************************************************
+ Websocket Actions
+****************************************************/
 function dispatch(event: OpenAIActions) {
   ws?.send(JSON.stringify(event));
 }
@@ -76,7 +76,7 @@ export function sendAudio(audio: string) {
 
 // these config params should probably be set when the OpenAI websocket is initialized
 // but, setting them slightly later (i.e. when the Twilio Media starts) seems to make
-// OpenAI's bot more responsive
+// OpenAI's bot more responsive.
 export function setSession() {
   dispatch({
     type: "session.update",
