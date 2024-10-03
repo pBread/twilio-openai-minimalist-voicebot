@@ -70,12 +70,12 @@ export async function startWs(): Promise<void> {
 
         // bot partial transcript
         case "response.audio_transcript.delta":
-          log.oai.info("bot transcript (delta): ", msg.delta);
+          // log.oai.info("bot transcript (delta): ", msg.delta);
           break;
 
         // bot transcript complete
         case "response.audio_transcript.done":
-          log.oai.info("bot transcript (final): ", msg.transcript);
+          // log.oai.info("bot transcript (final): ", msg.transcript);
           break;
 
         case "error":
