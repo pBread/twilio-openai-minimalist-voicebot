@@ -75,6 +75,19 @@ export function sendAudio(audio: string) {
   dispatch({ type: "input_audio_buffer.append", audio });
 }
 
+export function truncate(
+  item_id: string,
+  audio_end_ms: number,
+  content_index = 0
+) {
+  dispatch({
+    type: "conversation.item.truncate",
+    item_id,
+    audio_end_ms,
+    content_index,
+  });
+}
+
 // these config params should probably be set when the OpenAI websocket is initialized
 // but, setting them slightly later (i.e. when the Twilio Media starts) seems to make
 // OpenAI's bot more responsive.
