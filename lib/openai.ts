@@ -85,7 +85,7 @@ export function setSessionParams() {
       input_audio_format: "g711_ulaw",
       output_audio_format: "g711_ulaw",
       modalities: ["text", "audio"],
-      turn_detection: { type: "server_vad" },
+      turn_detection: { type: "server_vad" }, // VAD (voice activity detection) enables input_audio_buffer.speech_started / .speech_stopped
 
       instructions: config.openai.instructions,
       temperature: config.openai.temperature,
