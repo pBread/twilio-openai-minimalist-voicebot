@@ -88,7 +88,7 @@ app.ws("/media-stream/:callSid", (ws, req) => {
     log.app.info("user started speaking");
 
     oai.clearAudio(); // tell OpenAI to stop sending audio
-    twlo.clearAudio(); // tell Twilio to stop playing any audio that it's buffered
+    twlo.clearAudio(); // tell Twilio to stop playing any audio that it has buffered
   });
 
   // bot final transcript
