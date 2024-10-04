@@ -1,11 +1,11 @@
 import dotenv from "dotenv-flow";
 import express from "express";
 import ExpressWs from "express-ws";
-import config from "./config";
-import log from "./lib/logger";
-import * as oai from "./lib/openai";
-import * as twlo from "./lib/twilio";
-import type { CallStatus } from "./lib/twilio-types";
+import config from "../config";
+import log from "./logger";
+import * as oai from "./openai";
+import * as twlo from "./twilio";
+import type { CallStatus } from "./twilio-types";
 
 dotenv.config();
 
