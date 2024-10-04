@@ -4,6 +4,7 @@ import ExpressWs from "express-ws";
 import config from "../config";
 import log from "./logger";
 import * as oai from "./openai";
+import { OpenAIStreamMessage } from "./openai-types";
 import * as twlo from "./twilio";
 import type { CallStatus } from "./twilio-types";
 
@@ -66,6 +67,16 @@ app.ws("/media-stream/:callSid", (ws, req) => {
   twlo.setWs(ws);
   twlo.ws.on("error", (err) => log.twl.error(`websocket error`, err));
 
+  let callStartTime = Date.now();
+
+  oai.ws.on("message", (data) => {
+    const msg: OpenAIStreamMessage = JSON.parse(data.toString());
+
+    if (["response.audio.delta"].includes(msg.type)) return;
+
+    log.oai.debug(msg);
+  });
+
   // twilio media stream starts
   twlo.onMessage("start", (msg) => {
     log.twl.success("media stream started");
@@ -91,6 +102,23 @@ app.ws("/media-stream/:callSid", (ws, req) => {
     twlo.clearAudio(); // tell Twilio to stop playing any audio that it has buffered
   });
 
+  // handle truncation
+  let curItem = "";
+  oai.onMessage("conversation.item.created", (msg) => (curItem = msg.item.id));
+
+  let lastStopMs = 0;
+  oai.onMessage(
+    "input_audio_buffer.speech_stopped",
+    (msg) => (lastStopMs = msg.audio_end_ms)
+  );
+
+  oai.onMessage("input_audio_buffer.speech_stopped", (msg) => {
+    if (!curItem.length) return;
+
+    const elapsedMs = Date.now() - callStartTime;
+    oai.truncate(curItem, elapsedMs - lastStopMs);
+  });
+
   // bot final transcript
   oai.onMessage("response.audio_transcript.done", (msg) => {
     log.oai.info("bot transcript (final): ", msg.transcript);
@@ -104,3 +132,9 @@ const port = process.env.PORT || "3000";
 app.listen(port, () => {
   log.app.info(`server running on http://localhost:${port}`);
 });
+
+/****************************************************
+ Audio content of 2500 samples is already shorter than 8896 samples
+ Audio content of 2900 samples is already shorter than 3520 samples
+
+****************************************************/
