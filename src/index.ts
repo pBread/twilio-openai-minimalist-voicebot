@@ -74,7 +74,9 @@ app.ws("/media-stream/:callSid", (ws, req) => {
 
     if (["response.audio.delta"].includes(msg.type)) return;
 
-    log.oai.debug(msg);
+    const elapsedMs = Date.now() - callStartTime;
+
+    log.oai.debug(`elapsed: ${elapsedMs}`, msg);
   });
 
   // twilio media stream starts
@@ -112,7 +114,7 @@ app.ws("/media-stream/:callSid", (ws, req) => {
     (msg) => (lastStopMs = msg.audio_end_ms)
   );
 
-  oai.onMessage("input_audio_buffer.speech_stopped", (msg) => {
+  oai.onMessage("input_audio_buffer.speech_started", (msg) => {
     if (!curItem.length) return;
 
     const elapsedMs = Date.now() - callStartTime;
