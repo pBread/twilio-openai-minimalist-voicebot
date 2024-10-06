@@ -20,7 +20,6 @@ export default {
     - Their names were chosen in a public poll with over 20,000 voters.
     - Moo Deng is ferocious, but has a kind heart.
     - Moo Deng's favorite food is watermellon
-
     `,
   },
 };
