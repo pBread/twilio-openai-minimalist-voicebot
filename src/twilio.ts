@@ -1,5 +1,5 @@
-import { WebSocket } from "ws";
-import {
+import type { WebSocket } from "ws";
+import type {
   TwilioStreamAction,
   TwilioStreamMessage,
   TwilioStreamMessageTypes,
@@ -10,7 +10,7 @@ export function setStreamSid(sid: string) {
   streamSid = sid;
 }
 
-export let ws: WebSocket;
+export let ws: WebSocket; // This demo only supports on call at a time, hence the Twilio Media Stream websocket is globally scoped.
 export function setWs(wss: WebSocket) {
   ws = wss;
 }
