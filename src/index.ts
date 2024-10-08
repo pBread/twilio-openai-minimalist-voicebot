@@ -20,7 +20,7 @@ app.post("/incoming-call", async (req, res) => {
   log.twl.info(`incoming-call from ${From} to ${To}`);
 
   try {
-    oai.createWebsocket(); // This demo only supports one call at a time. Hence the OpenAI websocket is a singleton.
+    oai.createWebsocket(); // This demo only supports one call at a time, hence the OpenAI websocket is a singleton.
     oai.ws.on("open", () => log.oai.info("openai websocket opened"));
     oai.ws.on("error", (err) => log.oai.error("openai websocket error", err));
     // The incoming-call webhook is blocked until the OpenAI websocket is connected.
@@ -40,7 +40,8 @@ app.post("/incoming-call", async (req, res) => {
         `);
   } catch (error) {
     log.oai.error(
-      "incoming call webhook failed because OpenAI websocket could not connect."
+      "incoming call webhook failed, probably because OpenAI websocket could not connect.",
+      error
     );
     res.status(500).send();
   }
@@ -71,9 +72,9 @@ app.ws("/media-stream/:callSid", (ws, req) => {
     log.twl.success("media stream started");
     twlo.setStreamSid(msg.streamSid);
 
-    // The session params should probably be set when the OpenAI websocket is initialized
-    // but, setting them slightly later (i.e. when the Twilio Media starts) seems to make
-    // OpenAI's bot more responsive. I don't know why.
+    // OpenAI's websocket session parameters should probably be set when the it is
+    // initialized. However, setting them slightly later (i.e. when the Twilio Media starts)
+    // seems to make OpenAI's bot more responsive. I don't know why
     oai.setSessionParams();
 
     oai.speak(config.openai.introduction); // tell OpenAI to speak the introduction
