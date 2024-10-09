@@ -1,6 +1,6 @@
 {
   "author": "https://github.com/pBread",
-  "name": "twilio-openai-voice-agent",
+  "name": "twilio-openai-minimalist-voice-agent",
   "scripts": {
     "dev": "nodemon",
     "grok": "node scripts/ngrok.js",
