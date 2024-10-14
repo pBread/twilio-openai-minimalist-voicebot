@@ -53,45 +53,45 @@ export async function closeWebsocket(): Promise<void> {
 /****************************************************
  Websocket Actions
 ****************************************************/
-function dispatch(event: OpenAIActions) {
-  ws?.send(JSON.stringify(event));
-}
-
 export function clearAudio() {
-  dispatch({ type: "input_audio_buffer.clear" });
+  ws?.send(JSON.stringify({ type: "input_audio_buffer.clear" }));
 }
 
 export function speak(text: string) {
-  dispatch({
-    type: "response.create",
-    response: {
-      modalities: ["text", "audio"],
-      instructions: `Say this verbatum: ${text}`,
-    },
-  });
+  ws?.send(
+    JSON.stringify({
+      type: "response.create",
+      response: {
+        modalities: ["text", "audio"],
+        instructions: `Say this verbatum: ${text}`,
+      },
+    })
+  );
 }
 
 export function sendAudio(audio: string) {
-  dispatch({ type: "input_audio_buffer.append", audio });
+  ws?.send(JSON.stringify({ type: "input_audio_buffer.append", audio }));
 }
 
 // these config params should probably be set when the OpenAI websocket is initialized
 // but, setting them slightly later (i.e. when the Twilio Media starts) seems to make
 // OpenAI's bot more responsive.
 export function setSessionParams() {
-  dispatch({
-    type: "session.update",
-    session: {
-      input_audio_format: "g711_ulaw",
-      output_audio_format: "g711_ulaw",
-      modalities: ["text", "audio"],
-      turn_detection: { type: "server_vad" }, // VAD (voice activity detection) enables input_audio_buffer.speech_started / .speech_stopped
+  ws?.send(
+    JSON.stringify({
+      type: "session.update",
+      session: {
+        input_audio_format: "g711_ulaw",
+        output_audio_format: "g711_ulaw",
+        modalities: ["text", "audio"],
+        turn_detection: { type: "server_vad" }, // VAD (voice activity detection) enables input_audio_buffer.speech_started / .speech_stopped
 
-      instructions: config.openai.instructions,
-      temperature: config.openai.temperature,
-      voice: config.openai.voice,
-    },
-  });
+        instructions: config.openai.instructions,
+        temperature: config.openai.temperature,
+        voice: config.openai.voice,
+      },
+    })
+  );
 }
 
 /****************************************************

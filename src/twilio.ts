@@ -18,17 +18,16 @@ export function setWs(wss: WebSocket) {
 /****************************************************
  Media Stream Actions
 ****************************************************/
-export function dispatch(event: TwilioStreamAction) {
-  ws?.send(JSON.stringify(event));
-}
 export function clearAudio() {
-  dispatch({ event: "clear", streamSid });
+  ws?.send(JSON.stringify({ event: "clear", streamSid }));
 }
 export function sendAudio(audio: string) {
-  dispatch({ event: "media", streamSid, media: { payload: audio } });
+  ws?.send(
+    JSON.stringify({ event: "media", streamSid, media: { payload: audio } })
+  );
 }
 export function sendMark(name: string) {
-  dispatch({ event: "mark", streamSid, mark: { name } });
+  ws?.send(JSON.stringify({ event: "mark", streamSid, mark: { name } }));
 }
 
 /****************************************************
