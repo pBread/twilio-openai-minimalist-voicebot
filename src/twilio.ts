@@ -1,6 +1,5 @@
 import type { WebSocket } from "ws";
 import type {
-  TwilioStreamAction,
   TwilioStreamMessage,
   TwilioStreamMessageTypes,
 } from "./twilio-types";
