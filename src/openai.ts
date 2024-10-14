@@ -2,7 +2,6 @@ import WS from "ws";
 import config from "../config";
 import log from "./logger";
 import type {
-  OpenAIActions,
   OpenAIStreamMessage,
   OpenAIStreamMessageTypes,
 } from "./openai-types";
