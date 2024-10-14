@@ -1,10 +1,11 @@
 export default {
+  introduction: "Howdy there! I am an OpenAI voicebot. Ask me anything.",
+
   openai: {
     temperature: 0.8,
     voice: "alloy",
     wsUrl:
       "wss://api.openai.com/v1/realtime?model=gpt-4o-realtime-preview-2024-10-01",
-    introduction: "Howdy there! I am an OpenAI voicebot. Ask me anything.",
 
     instructions: `\
     You are a voicebot designed to answer questions.\

@@ -77,7 +77,7 @@ app.ws("/media-stream/:callSid", (ws, req) => {
     // seems to make OpenAI's bot more responsive. I don't know why
     oai.setSessionParams();
 
-    oai.speak(config.openai.introduction); // tell OpenAI to speak the introduction
+    oai.speak(config.introduction); // tell OpenAI to speak the introduction
   });
 
   // relay audio packets between Twilio & OpenAI
