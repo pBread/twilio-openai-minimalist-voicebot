@@ -20,7 +20,7 @@ app.post("/incoming-call", async (req, res) => {
   log.twl.info(`incoming-call from ${From} to ${To}`);
 
   try {
-    oai.createWebsocket(); // This demo only supports one call at a time, hence the OpenAI websocket is a singleton.
+    oai.createWebsocket(); // This demo only supports one call at a time, hence a single OpenAI websocket is stored globally
     oai.ws.on("open", () => log.oai.info("openai websocket opened"));
     oai.ws.on("error", (err) => log.oai.error("openai websocket error", err));
     // The incoming-call webhook is blocked until the OpenAI websocket is connected.
