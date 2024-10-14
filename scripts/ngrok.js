@@ -1,7 +1,8 @@
 require("dotenv-flow/config");
 
 const hostname = process.env.HOSTNAME;
-const ngrokArgs = ["http", "3000"];
+const PORT = process.env.PORT || "3000";
+const ngrokArgs = ["http", PORT];
 
 if (hostname) ngrokArgs.push("--hostname=" + hostname);
 
