@@ -44,7 +44,7 @@ Then copy the domain
 
 <img src="./docs/grok.png"/>
 
-**Note**, ngrok [static domains for all ngrok users](https://ngrok.com/blog-post/free-static-domains-ngrok-users).
+_Note_, ngrok provides [static domains for all ngrok users](https://ngrok.com/blog-post/free-static-domains-ngrok-users). You can avoid updating the `HOSTNAME` every time by provisioning your own static domain.
 
 ### 4. Add Environment Variables
 
