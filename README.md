@@ -30,29 +30,31 @@ cd twilio-openai-voicebot-simple
 npm install
 ```
 
-### 3. Add Environment Variables
+### 3. Start Ngrok Tunnel
+
+The application needs to know the domain (`HOSTNAME`) it is deployed to in order to function correctly. This domain is set in the `HOSTNAME` environment variable and it must be configured before starting the app.
+
+Start ngrok by running this command.
+
+```bash
+ngrok http 3000
+```
+
+Then copy the domain
+
+<img src="./docs/grok.png"/>
+
+**Note**, ngrok [static domains for all ngrok users](https://ngrok.com/blog-post/free-static-domains-ngrok-users).
+
+### 4. Add Environment Variables
 
 ```bash
 OPENAI_API_KEY=your-openai-api-key
 ```
 
 ```bash
-HOSTNAME=your-private-ngrok-domain
-
-or
-
-HOSTNAME=your-deployment-host
+HOSTNAME=your-ngrok-domain.ngrok.app
 ```
-
-### 4. Start NGrok Tunnel
-
-Expose your local server (port 3000) using nGrok
-
-```bash
-npm run grok
-```
-
-<b>Important:</b> if you do not have a private ngrok domain, you must start your nGrok tunnel first and add the domain as your `HOSTNAME` env variable. The app must know what the public domain is before it is started.
 
 ### 5. Run the App
 
@@ -66,8 +68,8 @@ npm run dev
 
 Go to your [Twilio Console](https://console.twilio.com/) and configure the Voice webhooks for your Twilio phone number:
 
-- <b>Incoming Call Webhook</b>: Select `POST` and set url to: https://your-ngrok-domain.ngrok.io/incoming-call
-- <b>Call Status Update Webhook</b>: Select `POST` and set url to: https://your-ngrok-domain.ngrok.io/call-status-update
+- <b>Incoming Call Webhook</b>: Select `POST` and set url to: `https://your-ngrok-domain.ngrok.app/incoming-call`
+- <b>Call Status Update Webhook</b>: Select `POST` and set url to: `https://your-ngrok-domain.ngrok.app/call-status-update`
 
 ### 7. Place a Call to Your Twilio Phone Number
 

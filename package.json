@@ -3,7 +3,6 @@
   "name": "twilio-openai-minimalist-voice-agent",
   "scripts": {
     "dev": "nodemon",
-    "grok": "node scripts/ngrok.js",
     "start": "ts-node src/index.ts"
   },
   "version": "1.0.0",
