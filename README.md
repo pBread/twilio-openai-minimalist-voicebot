@@ -9,13 +9,13 @@ This project demonstrates how to integrate [Twilio's Programmable Voice API](htt
 - Audio packets from the voice call are forwarded to [OpenAI's Realtime API](https://platform.openai.com/docs/guides/realtime/overview).
 - OpenAI responds with audio packets, which are forwarded to Twilio.
 
-## Getting Started
+## Get Started
+
+### 0. Prerequisites
 
 - [Twilio account](https://www.twilio.com/try-twilio) with a [phone number](https://help.twilio.com/articles/223135247-How-to-Search-for-and-Buy-a-Twilio-Phone-Number-from-Console)
 - [OpenAI Platform Account](https://platform.openai.com/signup) and `OPENAI_API_KEY`
 - [nGrok installed globally](https://ngrok.com/docs/getting-started/), if you want to run it locally
-
-# Get Started
 
 ### 1. Clone Repo
 
