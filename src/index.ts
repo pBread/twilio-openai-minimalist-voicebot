@@ -16,8 +16,7 @@ app.use(express.urlencoded({ extended: true })).use(express.json());
  Twilio Voice Webhook Endpoints
 ****************************************************/
 app.post("/incoming-call", async (req, res) => {
-  const { CallSid, From, To } = req.body;
-  log.twl.info(`incoming-call from ${From} to ${To}`);
+  log.twl.info(`incoming-call from ${req.body.From} to ${req.body.To}`);
 
   try {
     oai.createWebsocket(); // This demo only supports one call at a time, hence a single OpenAI websocket is stored globally
@@ -34,7 +33,7 @@ app.post("/incoming-call", async (req, res) => {
     res.end(`
         <Response>
           <Connect>
-            <Stream url="wss://${process.env.HOSTNAME}/media-stream/${CallSid}" />
+            <Stream url="wss://${process.env.HOSTNAME}/media-stream" />
           </Connect>
         </Response>
         `);
@@ -61,7 +60,7 @@ app.post("/call-status-update", async (req, res) => {
 /****************************************************
  Twilio Media Stream Websocket Endpoint 
 ****************************************************/
-app.ws("/media-stream/:callSid", (ws, req) => {
+app.ws("/media-stream", (ws, req) => {
   log.twl.info("incoming websocket");
 
   twlo.setWs(ws);
