@@ -17,12 +17,12 @@ export function setWs(wss: WebSocket) {
 /****************************************************
  Media Stream Actions, https://www.twilio.com/docs/voice/media-streams/websocket-messages#send-websocket-messages-to-twilio
 ****************************************************/
-/** Clear Twilio's audio buffer https://www.twilio.com/docs/voice/media-streams/websocket-messages#send-a-clear-message */
+/** Clear Twilio's audio buffer (https://www.twilio.com/docs/voice/media-streams/websocket-messages#send-a-clear-message) */
 export function clearAudio() {
   ws?.send(JSON.stringify({ event: "clear", streamSid }));
 }
 
-/** Send raw audio to Twilio call https://www.twilio.com/docs/voice/media-streams/websocket-messages#send-a-media-message */
+/** Send raw audio to Twilio call (https://www.twilio.com/docs/voice/media-streams/websocket-messages#send-a-media-message) */
 export function sendAudio(audio: string) {
   ws?.send(
     JSON.stringify({ event: "media", streamSid, media: { payload: audio } })

@@ -51,12 +51,12 @@ export async function closeWebsocket(): Promise<void> {
 /****************************************************
  Websocket Actions, see https://platform.openai.com/docs/api-reference/realtime-client-events
 ****************************************************/
-/** Clears OpenAI's audio buffer https://platform.openai.com/docs/api-reference/realtime-client-events/input_audio_buffer/clear */
+/** Clears OpenAI's audio buffer (https://platform.openai.com/docs/api-reference/realtime-client-events/input_audio_buffer/clear) */
 export function clearAudio() {
   ws?.send(JSON.stringify({ type: "input_audio_buffer.clear" }));
 }
 
-/** Create a response record that prompts the voicebot to say something https://platform.openai.com/docs/api-reference/realtime-client-events/response/create */
+/** Create a response record that prompts the voicebot to say something (https://platform.openai.com/docs/api-reference/realtime-client-events/response/create) */
 export function speak(text: string) {
   ws?.send(
     JSON.stringify({
@@ -69,7 +69,7 @@ export function speak(text: string) {
   );
 }
 
-/** Send raw audio packets to OpenAI's websocket https://platform.openai.com/docs/api-reference/realtime-client-events/input_audio_buffer/append */
+/** Send raw audio packets to OpenAI's websocket (https://platform.openai.com/docs/api-reference/realtime-client-events/input_audio_buffer/append) */
 export function sendAudio(audio: string) {
   ws?.send(JSON.stringify({ type: "input_audio_buffer.append", audio }));
 }
