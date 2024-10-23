@@ -15,7 +15,7 @@ This project demonstrates how to integrate [Twilio's Programmable Voice API](htt
 
 - [Twilio account](https://www.twilio.com/try-twilio) with a [phone number](https://help.twilio.com/articles/223135247-How-to-Search-for-and-Buy-a-Twilio-Phone-Number-from-Console)
 - [OpenAI Platform Account](https://platform.openai.com/signup) and `OPENAI_API_KEY`
-- [nGrok installed globally](https://ngrok.com/docs/getting-started/), if you want to run it locally
+- [nGrok installed globally](https://ngrok.com/docs/getting-started/)
 
 ### 1. Clone Repo
 
