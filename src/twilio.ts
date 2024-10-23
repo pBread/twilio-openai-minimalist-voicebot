@@ -15,8 +15,7 @@ export function setWs(wss: WebSocket) {
 }
 
 /****************************************************
- Media Stream Actions
- https://www.twilio.com/docs/voice/media-streams/websocket-messages#send-websocket-messages-to-twilio
+ Media Stream Actions, https://www.twilio.com/docs/voice/media-streams/websocket-messages#send-websocket-messages-to-twilio
 ****************************************************/
 /** Clear Twilio's audio buffer https://www.twilio.com/docs/voice/media-streams/websocket-messages#send-a-clear-message */
 export function clearAudio() {
@@ -31,9 +30,9 @@ export function sendAudio(audio: string) {
 }
 
 /****************************************************
- Websocket Listeners
+ Websocket Listeners, https://www.twilio.com/docs/voice/media-streams/websocket-messages#websocket-messages-from-twilio 
 ****************************************************/
-/** Adds an listener to an incoming message type from Twilio's Media Stream https://www.twilio.com/docs/voice/media-streams/websocket-messages#websocket-messages-from-twilio */
+/** Adds an listener to an incoming message type from Twilio's Media Stream */
 export function onMessage<T extends TwilioStreamMessageTypes>(
   type: T,
   callback: (message: TwilioStreamMessage & { event: T }) => void
