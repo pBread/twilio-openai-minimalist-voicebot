@@ -5,7 +5,7 @@ import config from "../config";
 import log from "./logger";
 import * as oai from "./openai";
 import * as twlo from "./twilio";
-import type { CallStatus } from "./twilio-types";
+import type { CallStatus } from "./types";
 
 dotenv.config();
 

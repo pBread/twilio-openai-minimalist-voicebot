@@ -1,8 +1,5 @@
 import type { WebSocket } from "ws";
-import type {
-  TwilioStreamMessage,
-  TwilioStreamMessageTypes,
-} from "./twilio-types";
+import type { TwilioStreamMessage, TwilioStreamMessageTypes } from "./types";
 
 let streamSid: string;
 export function setStreamSid(sid: string) {

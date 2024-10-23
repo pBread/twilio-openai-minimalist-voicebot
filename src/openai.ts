@@ -1,10 +1,7 @@
 import WS from "ws";
 import config from "../config";
 import log from "./logger";
-import type {
-  OpenAIStreamMessage,
-  OpenAIStreamMessageTypes,
-} from "./openai-types";
+import type { OpenAIStreamMessage, OpenAIStreamMessageTypes } from "./types";
 
 /****************************************************
  Websocket Lifecycle, see https://platform.openai.com/docs/guides/realtime/overview
