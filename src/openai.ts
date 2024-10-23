@@ -6,13 +6,13 @@ import type {
   OpenAIStreamMessageTypes,
 } from "./openai-types";
 
+/****************************************************
+ Websocket Lifecycle
+ https://platform.openai.com/docs/guides/realtime/overview
+****************************************************/
 export let ws: WS; // This demo only supports on call at a time, hence the OpenAI websocket is globally scoped.
 export let wsPromise: Promise<void>;
 
-/****************************************************
- Establish Websocket Connection to OpenAI
- https://platform.openai.com/docs/guides/realtime/overview
-****************************************************/
 export function createWebsocket() {
   // websocket must be closed or uninitialized
   if (ws && ws?.readyState !== ws.CLOSED)
@@ -52,29 +52,35 @@ export async function closeWebsocket(): Promise<void> {
 /****************************************************
  Websocket Actions
 ****************************************************/
+/** Clears OpenAI's audio buffer https://platform.openai.com/docs/api-reference/realtime-client-events/input_audio_buffer/clear */
 export function clearAudio() {
   ws?.send(JSON.stringify({ type: "input_audio_buffer.clear" }));
 }
 
+/** Create a response record that prompts the voicebot to say something https://platform.openai.com/docs/api-reference/realtime-client-events/response/create */
 export function speak(text: string) {
   ws?.send(
     JSON.stringify({
       type: "response.create",
       response: {
         modalities: ["text", "audio"],
-        instructions: `Say this verbatum: ${text}`,
+        instructions: `Say this verbatum:\n${text}`,
       },
     })
   );
 }
 
+/** Send raw audio packets to OpenAI's websocket https://platform.openai.com/docs/api-reference/realtime-client-events/input_audio_buffer/append */
 export function sendAudio(audio: string) {
   ws?.send(JSON.stringify({ type: "input_audio_buffer.append", audio }));
 }
 
-// these config params should probably be set when the OpenAI websocket is initialized
-// but, setting them slightly later (i.e. when the Twilio Media starts) seems to make
-// OpenAI's bot more responsive.
+/** Sets the OpenAI Realtime session parameter per the demo configuation.
+ *
+ * Note, these config params should probably be set when the OpenAI websocket is initialized
+ * but, setting them slightly later (i.e. when the Twilio Media starts) seems to make
+ * OpenAI's bot more responsive.
+ */
 export function setSessionParams() {
   ws?.send(
     JSON.stringify({
@@ -94,8 +100,9 @@ export function setSessionParams() {
 }
 
 /****************************************************
- Event Subscribers
+ Websocket Listeners
 ****************************************************/
+/** Adds a listener to a type of incoming message from OpenAI's websocket https://platform.openai.com/docs/api-reference/realtime-server-events */
 export function onMessage<T extends OpenAIStreamMessageTypes>(
   type: T,
   callback: (message: OpenAIStreamMessage & { type: T }) => void
