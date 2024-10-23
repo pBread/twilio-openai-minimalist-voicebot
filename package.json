@@ -2,7 +2,7 @@
   "author": "https://github.com/pBread",
   "name": "twilio-openai-minimalist-voice-agent",
   "scripts": {
-    "dev": "nodemon",
+    "dev": "nodemon --exec 'ts-node src/index.ts' --ext 'ts,js,json' --watch 'src'",
     "start": "ts-node src/index.ts"
   },
   "version": "1.0.0",
