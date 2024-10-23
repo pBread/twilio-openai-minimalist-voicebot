@@ -7,8 +7,7 @@ import type {
 } from "./openai-types";
 
 /****************************************************
- Websocket Lifecycle 
- https://platform.openai.com/docs/guides/realtime/overview
+ Websocket Lifecycle, see https://platform.openai.com/docs/guides/realtime/overview
 ****************************************************/
 export let ws: WS; // This demo only supports on call at a time, hence the OpenAI websocket is globally scoped.
 export let wsPromise: Promise<void>;
@@ -50,8 +49,7 @@ export async function closeWebsocket(): Promise<void> {
 }
 
 /****************************************************
- Websocket Actions
- https://platform.openai.com/docs/api-reference/realtime-client-events
+ Websocket Actions, see https://platform.openai.com/docs/api-reference/realtime-client-events
 ****************************************************/
 /** Clears OpenAI's audio buffer https://platform.openai.com/docs/api-reference/realtime-client-events/input_audio_buffer/clear */
 export function clearAudio() {
@@ -101,8 +99,7 @@ export function setSessionParams() {
 }
 
 /****************************************************
- Websocket Listeners
- https://platform.openai.com/docs/api-reference/realtime-server-events
+ Websocket Listeners, see https://platform.openai.com/docs/api-reference/realtime-server-events
 ****************************************************/
 /** Adds an listener to an incoming message type */
 export function onMessage<T extends OpenAIStreamMessageTypes>(
