@@ -7,10 +7,12 @@
   },
   "version": "1.0.0",
   "dependencies": {
+    "@types/twilio": "^3.19.3",
     "dotenv-flow": "^4.1.0",
     "express": "^4.21.0",
     "express-ws": "^5.0.2",
     "node-color-log": "^12.0.1",
+    "twilio": "^5.3.5",
     "ws": "^8.18.0"
   },
   "devDependencies": {
